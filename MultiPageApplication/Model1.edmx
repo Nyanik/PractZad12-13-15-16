@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="GenderTable">
+          <Key>
+            <PropertyRef Name="ID_Gender" />
+          </Key>
+          <Property Name="ID_Gender" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Komplect">
+          <Key>
+            <PropertyRef Name="ID_Komplect" />
+          </Key>
+          <Property Name="ID_Komplect" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Kompl" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cost" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Postavshik">
+          <Key>
+            <PropertyRef Name="ID_Postavshik" />
+          </Key>
+          <Property Name="ID_Postavshik" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NamePostavhik" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleTable">
+          <Key>
+            <PropertyRef Name="ID_Role" />
+          </Key>
+          <Property Name="ID_Role" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="nchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserPhoto">
+          <Key>
+            <PropertyRef Name="IDUser" />
+          </Key>
+          <Property Name="IDUser" Type="int" Nullable="false" />
+          <Property Name="PhotoPath" Type="nchar" MaxLength="10" />
+          <Property Name="PhotoBinary" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_User" />
+          </Key>
+          <Property Name="ID_User" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Password" Type="int" Nullable="false" />
+          <Property Name="ID_Gender" Type="int" Nullable="false" />
+          <Property Name="ID_Role" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zakup">
+          <Key>
+            <PropertyRef Name="ID_Zakup" />
+          </Key>
+          <Property Name="ID_Zakup" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Komplect" Type="int" Nullable="false" />
+          <Property Name="ID_Postavshik" Type="int" Nullable="false" />
+          <Property Name="Photo" Type="image" />
+          <Property Name="Data_zakup" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ZakupKomplect">
+          <Key>
+            <PropertyRef Name="ID_Zakup_Komplect" />
+          </Key>
+          <Property Name="ID_Zakup_Komplect" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Komplect" Type="int" />
+          <Property Name="ID_Zakup" Type="int" Nullable="false" />
+          <Property Name="Kolvo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_UserPhoto_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserPhoto" Type="Self.UserPhoto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="UserPhoto">
+              <PropertyRef Name="IDUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_GenderTable">
+          <End Role="GenderTable" Type="Self.GenderTable" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GenderTable">
+              <PropertyRef Name="ID_Gender" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ID_Gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_RoleTable">
+          <End Role="RoleTable" Type="Self.RoleTable" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoleTable">
+              <PropertyRef Name="ID_Role" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ID_Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakup_Postavshik">
+          <End Role="Postavshik" Type="Self.Postavshik" Multiplicity="1" />
+          <End Role="Zakup" Type="Self.Zakup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Postavshik">
+              <PropertyRef Name="ID_Postavshik" />
+            </Principal>
+            <Dependent Role="Zakup">
+              <PropertyRef Name="ID_Postavshik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZakupKomplect_Komplect">
+          <End Role="Komplect" Type="Self.Komplect" Multiplicity="0..1" />
+          <End Role="ZakupKomplect" Type="Self.ZakupKomplect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Komplect">
+              <PropertyRef Name="ID_Komplect" />
+            </Principal>
+            <Dependent Role="ZakupKomplect">
+              <PropertyRef Name="ID_Komplect" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZakupKomplect_Zakup">
+          <End Role="Zakup" Type="Self.Zakup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ZakupKomplect" Type="Self.ZakupKomplect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zakup">
+              <PropertyRef Name="ID_Zakup" />
+            </Principal>
+            <Dependent Role="ZakupKomplect">
+              <PropertyRef Name="ID_Zakup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="GenderTable" EntityType="Self.GenderTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Komplect" EntityType="Self.Komplect" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Postavshik" EntityType="Self.Postavshik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleTable" EntityType="Self.RoleTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPhoto" EntityType="Self.UserPhoto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zakup" EntityType="Self.Zakup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZakupKomplect" EntityType="Self.ZakupKomplect" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_UserPhoto_Users" Association="Self.FK_UserPhoto_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserPhoto" EntitySet="UserPhoto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_GenderTable" Association="Self.FK_Users_GenderTable">
+            <End Role="GenderTable" EntitySet="GenderTable" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_RoleTable" Association="Self.FK_Users_RoleTable">
+            <End Role="RoleTable" EntitySet="RoleTable" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakup_Postavshik" Association="Self.FK_Zakup_Postavshik">
+            <End Role="Postavshik" EntitySet="Postavshik" />
+            <End Role="Zakup" EntitySet="Zakup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZakupKomplect_Komplect" Association="Self.FK_ZakupKomplect_Komplect">
+            <End Role="Komplect" EntitySet="Komplect" />
+            <End Role="ZakupKomplect" EntitySet="ZakupKomplect" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZakupKomplect_Zakup" Association="Self.FK_ZakupKomplect_Zakup">
+            <End Role="Zakup" EntitySet="Zakup" />
+            <End Role="ZakupKomplect" EntitySet="ZakupKomplect" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="GenderTable" EntityType="Model.GenderTable" />
+          <EntitySet Name="Komplect" EntityType="Model.Komplect" />
+          <EntitySet Name="Postavshik" EntityType="Model.Postavshik" />
+          <EntitySet Name="RoleTable" EntityType="Model.RoleTable" />
+          <EntitySet Name="UserPhoto" EntityType="Model.UserPhoto" />
+          <EntitySet Name="Users" EntityType="Model.Users" />
+          <EntitySet Name="Zakup" EntityType="Model.Zakup" />
+          <EntitySet Name="ZakupKomplect" EntityType="Model.ZakupKomplect" />
+          <AssociationSet Name="FK_Users_GenderTable" Association="Model.FK_Users_GenderTable">
+            <End Role="GenderTable" EntitySet="GenderTable" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZakupKomplect_Komplect" Association="Model.FK_ZakupKomplect_Komplect">
+            <End Role="Komplect" EntitySet="Komplect" />
+            <End Role="ZakupKomplect" EntitySet="ZakupKomplect" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakup_Postavshik" Association="Model.FK_Zakup_Postavshik">
+            <End Role="Postavshik" EntitySet="Postavshik" />
+            <End Role="Zakup" EntitySet="Zakup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_RoleTable" Association="Model.FK_Users_RoleTable">
+            <End Role="RoleTable" EntitySet="RoleTable" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPhoto_Users" Association="Model.FK_UserPhoto_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserPhoto" EntitySet="UserPhoto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZakupKomplect_Zakup" Association="Model.FK_ZakupKomplect_Zakup">
+            <End Role="Zakup" EntitySet="Zakup" />
+            <End Role="ZakupKomplect" EntitySet="ZakupKomplect" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="GenderTable">
+          <Key>
+            <PropertyRef Name="ID_Gender" />
+          </Key>
+          <Property Name="ID_Gender" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Users_GenderTable" FromRole="GenderTable" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Komplect">
+          <Key>
+            <PropertyRef Name="ID_Komplect" />
+          </Key>
+          <Property Name="ID_Komplect" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kompl" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cost" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ZakupKomplect" Relationship="Model.FK_ZakupKomplect_Komplect" FromRole="Komplect" ToRole="ZakupKomplect" />
+        </EntityType>
+        <EntityType Name="Postavshik">
+          <Key>
+            <PropertyRef Name="ID_Postavshik" />
+          </Key>
+          <Property Name="ID_Postavshik" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NamePostavhik" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Zakup" Relationship="Model.FK_Zakup_Postavshik" FromRole="Postavshik" ToRole="Zakup" />
+        </EntityType>
+        <EntityType Name="RoleTable">
+          <Key>
+            <PropertyRef Name="ID_Role" />
+          </Key>
+          <Property Name="ID_Role" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="15" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Users_RoleTable" FromRole="RoleTable" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="UserPhoto">
+          <Key>
+            <PropertyRef Name="IDUser" />
+          </Key>
+          <Property Name="IDUser" Type="Int32" Nullable="false" />
+          <Property Name="PhotoPath" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PhotoBinary" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_UserPhoto_Users" FromRole="UserPhoto" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID_User" />
+          </Key>
+          <Property Name="ID_User" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="Int32" Nullable="false" />
+          <Property Name="ID_Gender" Type="Int32" Nullable="false" />
+          <Property Name="ID_Role" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GenderTable" Relationship="Model.FK_Users_GenderTable" FromRole="Users" ToRole="GenderTable" />
+          <NavigationProperty Name="RoleTable" Relationship="Model.FK_Users_RoleTable" FromRole="Users" ToRole="RoleTable" />
+          <NavigationProperty Name="UserPhoto" Relationship="Model.FK_UserPhoto_Users" FromRole="Users" ToRole="UserPhoto" />
+        </EntityType>
+        <EntityType Name="Zakup">
+          <Key>
+            <PropertyRef Name="ID_Zakup" />
+          </Key>
+          <Property Name="ID_Zakup" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Komplect" Type="Int32" Nullable="false" />
+          <Property Name="ID_Postavshik" Type="Int32" Nullable="false" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Data_zakup" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Postavshik" Relationship="Model.FK_Zakup_Postavshik" FromRole="Zakup" ToRole="Postavshik" />
+          <NavigationProperty Name="ZakupKomplect" Relationship="Model.FK_ZakupKomplect_Zakup" FromRole="Zakup" ToRole="ZakupKomplect" />
+        </EntityType>
+        <EntityType Name="ZakupKomplect">
+          <Key>
+            <PropertyRef Name="ID_Zakup_Komplect" />
+          </Key>
+          <Property Name="ID_Zakup_Komplect" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Komplect" Type="Int32" />
+          <Property Name="ID_Zakup" Type="Int32" Nullable="false" />
+          <Property Name="Kolvo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Komplect" Relationship="Model.FK_ZakupKomplect_Komplect" FromRole="ZakupKomplect" ToRole="Komplect" />
+          <NavigationProperty Name="Zakup" Relationship="Model.FK_ZakupKomplect_Zakup" FromRole="ZakupKomplect" ToRole="Zakup" />
+        </EntityType>
+        <Association Name="FK_Users_GenderTable">
+          <End Type="Model.GenderTable" Role="GenderTable" Multiplicity="1" />
+          <End Type="Model.Users" Role="Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GenderTable">
+              <PropertyRef Name="ID_Gender" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ID_Gender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZakupKomplect_Komplect">
+          <End Type="Model.Komplect" Role="Komplect" Multiplicity="0..1" />
+          <End Type="Model.ZakupKomplect" Role="ZakupKomplect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Komplect">
+              <PropertyRef Name="ID_Komplect" />
+            </Principal>
+            <Dependent Role="ZakupKomplect">
+              <PropertyRef Name="ID_Komplect" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakup_Postavshik">
+          <End Type="Model.Postavshik" Role="Postavshik" Multiplicity="1" />
+          <End Type="Model.Zakup" Role="Zakup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Postavshik">
+              <PropertyRef Name="ID_Postavshik" />
+            </Principal>
+            <Dependent Role="Zakup">
+              <PropertyRef Name="ID_Postavshik" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_RoleTable">
+          <End Type="Model.RoleTable" Role="RoleTable" Multiplicity="1" />
+          <End Type="Model.Users" Role="Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoleTable">
+              <PropertyRef Name="ID_Role" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ID_Role" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPhoto_Users">
+          <End Type="Model.Users" Role="Users" Multiplicity="1" />
+          <End Type="Model.UserPhoto" Role="UserPhoto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="UserPhoto">
+              <PropertyRef Name="IDUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZakupKomplect_Zakup">
+          <End Type="Model.Zakup" Role="Zakup" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ZakupKomplect" Role="ZakupKomplect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zakup">
+              <PropertyRef Name="ID_Zakup" />
+            </Principal>
+            <Dependent Role="ZakupKomplect">
+              <PropertyRef Name="ID_Zakup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="GenderTable">
+            <EntityTypeMapping TypeName="Model.GenderTable">
+              <MappingFragment StoreEntitySet="GenderTable">
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="ID_Gender" ColumnName="ID_Gender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Komplect">
+            <EntityTypeMapping TypeName="Model.Komplect">
+              <MappingFragment StoreEntitySet="Komplect">
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Kompl" ColumnName="Kompl" />
+                <ScalarProperty Name="ID_Komplect" ColumnName="ID_Komplect" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Postavshik">
+            <EntityTypeMapping TypeName="Model.Postavshik">
+              <MappingFragment StoreEntitySet="Postavshik">
+                <ScalarProperty Name="NamePostavhik" ColumnName="NamePostavhik" />
+                <ScalarProperty Name="ID_Postavshik" ColumnName="ID_Postavshik" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleTable">
+            <EntityTypeMapping TypeName="Model.RoleTable">
+              <MappingFragment StoreEntitySet="RoleTable">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="ID_Role" ColumnName="ID_Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserPhoto">
+            <EntityTypeMapping TypeName="Model.UserPhoto">
+              <MappingFragment StoreEntitySet="UserPhoto">
+                <ScalarProperty Name="PhotoBinary" ColumnName="PhotoBinary" />
+                <ScalarProperty Name="PhotoPath" ColumnName="PhotoPath" />
+                <ScalarProperty Name="IDUser" ColumnName="IDUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Model.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID_Role" ColumnName="ID_Role" />
+                <ScalarProperty Name="ID_Gender" ColumnName="ID_Gender" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID_User" ColumnName="ID_User" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zakup">
+            <EntityTypeMapping TypeName="Model.Zakup">
+              <MappingFragment StoreEntitySet="Zakup">
+                <ScalarProperty Name="Data_zakup" ColumnName="Data_zakup" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="ID_Postavshik" ColumnName="ID_Postavshik" />
+                <ScalarProperty Name="ID_Komplect" ColumnName="ID_Komplect" />
+                <ScalarProperty Name="ID_Zakup" ColumnName="ID_Zakup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZakupKomplect">
+            <EntityTypeMapping TypeName="Model.ZakupKomplect">
+              <MappingFragment StoreEntitySet="ZakupKomplect">
+                <ScalarProperty Name="Kolvo" ColumnName="Kolvo" />
+                <ScalarProperty Name="ID_Zakup" ColumnName="ID_Zakup" />
+                <ScalarProperty Name="ID_Komplect" ColumnName="ID_Komplect" />
+                <ScalarProperty Name="ID_Zakup_Komplect" ColumnName="ID_Zakup_Komplect" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
